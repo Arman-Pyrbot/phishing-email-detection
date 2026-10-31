@@ -1,0 +1,18 @@
+{
+    "model": "ml/models/deberta_phishing/best",
+    "test_samples": 20926,
+    "accuracy": 0.9956035553856446,
+    "precision": 0.9976281700419631,
+    "recall": 0.9940010907107799,
+    "f1": 0.9958113276270261,
+    "confusion_matrix": [
+        [
+            9898,
+            26
+        ],
+        [
+            66,
+            10936
+        ]
+    ]
+}

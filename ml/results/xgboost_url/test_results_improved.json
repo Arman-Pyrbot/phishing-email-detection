@@ -1,0 +1,22 @@
+{
+  "model": "XGBoost",
+  "representation": "25 handcrafted URL features + 300 SVD character features",
+  "train_samples": 188296,
+  "validation_samples": 23537,
+  "test_samples": 23537,
+  "accuracy": 0.9977907124952203,
+  "precision": 0.9997001798920647,
+  "recall": 0.995125348189415,
+  "f1": 0.9974075181972281,
+  "roc_auc": 0.9989155981038015,
+  "confusion_matrix": [
+    [
+      13482,
+      3
+    ],
+    [
+      49,
+      10003
+    ]
+  ]
+}
