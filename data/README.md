@@ -32,9 +32,8 @@ Stage 3:
 
 | Dataset | Link | Rows |
 |---|---|---|
-| Curated email datasets, 11 corpora (Champa et al., ICMI 2024) | https://zenodo.org/records/8339691 | 139,502 after merging with the two sets below and removing duplicates |
+| Curated email datasets, 11 corpora (Champa et al., ICMI 2024) | https://zenodo.org/records/8339691 | 139,502 after merging and removing duplicates |
 | SpaPhish | https://doi.org/10.17632/hz2d6gz7pc.3 | 1,395 |
-| Short-text phishing set (`phishing_dataset_1000.xlsx`) | source link not recorded | 909 |
 | PhiUSIIL (Prasad and Chandra, 2024) | https://archive.ics.uci.edu/dataset/967 | 235,370 after removing duplicates |
 
 The raw data is NOT included. It is the property of their respective authors. `stage1_bert_tiny/training/fetch_external.py` downloads Nazario, Nigerian fraud and SpamAssassin automatically.
