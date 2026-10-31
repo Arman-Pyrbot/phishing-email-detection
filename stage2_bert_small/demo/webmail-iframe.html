@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Inbox — webmail with the message in a frame</title>
+    <!-- Synthetic, inert test fixture for the phishing-project extension.
+         Some webmail clients and dashboards render their main content inside an
+         iframe rather than the top document. This page reproduces that shape:
+         the navigation is in the top document and the message body is inside a
+         same-origin iframe, so an extractor that only reads the top document
+         sees chrome and no message. -->
+    <style>
+      body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+             color: #1f2328; display: flex; }
+      aside { width: 230px; padding: 16px; border-right: 1px solid #d0d7de; background: #f6f8fa; }
+      aside a { display: block; padding: 4px 8px; color: #1f2328; text-decoration: none; font-size: 13px; }
+      main { flex: 1; padding: 16px 24px; }
+      .topbar { display: flex; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid #d0d7de;
+                color: #656d76; font-size: 13px; }
+      .toolbar { padding: 10px 0; color: #656d76; font-size: 12px; }
+      .toolbar span { margin-right: 14px; }
+      iframe { width: 100%; height: 460px; border: 1px solid #d0d7de; border-radius: 8px; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <a href="#">Compose</a>
+      <a href="#">Inbox 770</a>
+      <a href="#">Starred</a>
+      <a href="#">Snoozed</a>
+      <a href="#">Important</a>
+      <a href="#">Sent</a>
+      <a href="#">Drafts 1</a>
+      <a href="#">All Mail</a>
+      <a href="#">Trash</a>
+      <a href="#">Spam 12</a>
+      <a href="#">Purchases 601</a>
+      <a href="#">Social 2370</a>
+      <a href="#">Updates 2370</a>
+      <a href="#">Forums 880</a>
+      <a href="#">Promotions 880</a>
+      <a href="#">Labels</a>
+      <a href="#">Research Paper 3</a>
+      <a href="#">SBI 3</a>
+      <a href="#">Manage labels</a>
+      <a href="#">Create new label</a>
+      <a href="#">Settings</a>
+      <a href="#">Help and feedback</a>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <span>Search mail</span>
+        <span>Search by sender</span>
+        <span>Show search options</span>
+        <span>Support</span>
+        <span>Settings</span>
+        <span>Apps</span>
+        <span>Account</span>
+        <span>Upgrade</span>
+      </div>
+
+      <div class="toolbar">
+        <span>Back to inbox</span>
+        <span>Archive</span>
+        <span>Report spam</span>
+        <span>Delete</span>
+        <span>Mark as read</span>
+        <span>Snooze</span>
+        <span>Move to</span>
+        <span>Labels</span>
+        <span>More options</span>
+        <span>Print all</span>
+        <span>Reply</span>
+        <span>Forward</span>
+      </div>
+
+      <iframe title="Message" srcdoc="
+        <!DOCTYPE html><html><head><meta charset='utf-8'><title>Message</title>
+        <style>body{font:14px/1.6 system-ui,sans-serif;padding:12px;color:#1f2328}</style>
+        </head><body>
+        <h1>Phishing test email — account security</h1>
+        <p>Hi Arman,</p>
+        <p>We detected a sign-in to your PayPal account that we were unable to verify.</p>
+        <p>For your protection, access to some account features has been temporarily restricted.</p>
+        <p>If this activity was not performed by you, please verify your account immediately.</p>
+        <p>Review account activity: https://paypal-security-check.example.net/verify</p>
+        <p>You may be asked to sign in again and confirm your billing information.</p>
+        <p>Please complete verification within 24 hours. If we cannot confirm your account
+        information, access to your account may be suspended.</p>
+        <p>Thank you, PayPal Security Team. This is an automated security notification.</p>
+        </body></html>
+      "></iframe>
+    </main>
+  </body>
+</html>

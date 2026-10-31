@@ -1,0 +1,252 @@
+{
+  "methodology": "headless Chrome, vendored ONNX Runtime Web 1.18 WASM (single-threaded), model fetched from the same bundled files the extension ships",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "model_bytes": 4480678,
+  "model_load_ms": 301.1,
+  "inference_ms": {
+    "median": 5.2,
+    "p95": 6,
+    "n": 30
+  },
+  "model_parity": {
+    "n_fixtures": 24,
+    "reference": "PyTorch float32 probabilities recorded by training/export.py",
+    "fp32_runtime_equivalence": {
+      "note": "same float32 graph, browser runtime vs native runtime",
+      "max_abs_diff": 0.000002,
+      "mean_abs_diff": 0,
+      "tolerance": 0.001
+    },
+    "shipped_int8_vs_reference": {
+      "max_abs_diff": 0.169333,
+      "mean_abs_diff": 0.013311,
+      "verdict_mismatches": 0
+    },
+    "int8_cross_runtime": {
+      "note": "same int8 graph, browser ORT-Web 1.18 WASM vs native ORT 1.30 CPU",
+      "max_abs_diff": 0.162583,
+      "mean_abs_diff": 0.007846,
+      "verdict_mismatches": 0,
+      "mean_tolerance": 0.02
+    },
+    "passed": true,
+    "rows": [
+      {
+        "shape": "url only",
+        "reference_fp32": 0.077357,
+        "python_int8": 0.060633,
+        "browser_int8": 0.04964,
+        "diff_vs_reference": 0.027717,
+        "diff_vs_python_int8": 0.010993,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url only",
+        "reference_fp32": 0.994962,
+        "python_int8": 0.992862,
+        "browser_int8": 0.992662,
+        "diff_vs_reference": 0.0023,
+        "diff_vs_python_int8": 0.0002,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url only",
+        "reference_fp32": 0.917715,
+        "python_int8": 0.820494,
+        "browser_int8": 0.807405,
+        "diff_vs_reference": 0.11031,
+        "diff_vs_python_int8": 0.013089,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url only",
+        "reference_fp32": 0.005053,
+        "python_int8": 0.004741,
+        "browser_int8": 0.004561,
+        "diff_vs_reference": 0.000492,
+        "diff_vs_python_int8": 0.00018,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url + title",
+        "reference_fp32": 0.002352,
+        "python_int8": 0.0021,
+        "browser_int8": 0.002091,
+        "diff_vs_reference": 0.000261,
+        "diff_vs_python_int8": 0.000009,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url + title",
+        "reference_fp32": 0.998787,
+        "python_int8": 0.998777,
+        "browser_int8": 0.99877,
+        "diff_vs_reference": 0.000017,
+        "diff_vs_python_int8": 0.000007,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url + body",
+        "reference_fp32": 0.011592,
+        "python_int8": 0.007993,
+        "browser_int8": 0.00861,
+        "diff_vs_reference": 0.002982,
+        "diff_vs_python_int8": 0.000617,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "body only",
+        "reference_fp32": 0.996778,
+        "python_int8": 0.9966,
+        "browser_int8": 0.99662,
+        "diff_vs_reference": 0.000158,
+        "diff_vs_python_int8": 0.00002,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "from + body",
+        "reference_fp32": 0.996617,
+        "python_int8": 0.996388,
+        "browser_int8": 0.996383,
+        "diff_vs_reference": 0.000234,
+        "diff_vs_python_int8": 0.000005,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "url + title + from + body",
+        "reference_fp32": 0.284762,
+        "python_int8": 0.278012,
+        "browser_int8": 0.115429,
+        "diff_vs_reference": 0.169333,
+        "diff_vs_python_int8": 0.162583,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.001244,
+        "python_int8": 0.001259,
+        "browser_int8": 0.001264,
+        "diff_vs_reference": 0.00002,
+        "diff_vs_python_int8": 0.000005,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.998216,
+        "python_int8": 0.99806,
+        "browser_int8": 0.998003,
+        "diff_vs_reference": 0.000213,
+        "diff_vs_python_int8": 0.000057,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.001231,
+        "python_int8": 0.001237,
+        "browser_int8": 0.001236,
+        "diff_vs_reference": 0.000005,
+        "diff_vs_python_int8": 0.000001,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.003303,
+        "python_int8": 0.002674,
+        "browser_int8": 0.002609,
+        "diff_vs_reference": 0.000694,
+        "diff_vs_python_int8": 0.000065,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.00313,
+        "python_int8": 0.002445,
+        "browser_int8": 0.002518,
+        "diff_vs_reference": 0.000612,
+        "diff_vs_python_int8": 0.000073,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.001502,
+        "python_int8": 0.001473,
+        "browser_int8": 0.001495,
+        "diff_vs_reference": 0.000007,
+        "diff_vs_python_int8": 0.000022,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.998776,
+        "python_int8": 0.99876,
+        "browser_int8": 0.998762,
+        "diff_vs_reference": 0.000014,
+        "diff_vs_python_int8": 0.000002,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.001304,
+        "python_int8": 0.001316,
+        "browser_int8": 0.001323,
+        "diff_vs_reference": 0.000019,
+        "diff_vs_python_int8": 0.000007,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.001239,
+        "python_int8": 0.001241,
+        "browser_int8": 0.001244,
+        "diff_vs_reference": 0.000005,
+        "diff_vs_python_int8": 0.000003,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.002486,
+        "python_int8": 0.002171,
+        "browser_int8": 0.002235,
+        "diff_vs_reference": 0.000251,
+        "diff_vs_python_int8": 0.000064,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.993724,
+        "python_int8": 0.991384,
+        "browser_int8": 0.991593,
+        "diff_vs_reference": 0.002131,
+        "diff_vs_python_int8": 0.000209,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.998549,
+        "python_int8": 0.998523,
+        "browser_int8": 0.998535,
+        "diff_vs_reference": 0.000014,
+        "diff_vs_python_int8": 0.000012,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.998797,
+        "python_int8": 0.99878,
+        "browser_int8": 0.998783,
+        "diff_vs_reference": 0.000014,
+        "diff_vs_python_int8": 0.000003,
+        "verdict_agrees_with_reference": true
+      },
+      {
+        "shape": "test sample",
+        "reference_fp32": 0.006473,
+        "python_int8": 0.004893,
+        "browser_int8": 0.004812,
+        "diff_vs_reference": 0.001661,
+        "diff_vs_python_int8": 0.000081,
+        "verdict_agrees_with_reference": true
+      }
+    ]
+  }
+}

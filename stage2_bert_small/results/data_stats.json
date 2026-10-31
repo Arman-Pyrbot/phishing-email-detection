@@ -1,0 +1,19 @@
+{
+  "seed": 42,
+  "raw_rows": 159286,
+  "removed_duplicates": 9717,
+  "synthetic_rows": 5000,
+  "augmented_train_rows": 117612,
+  "sizes": {
+    "train": 245073,
+    "val": 15897,
+    "test": 15928
+  },
+  "phishing_rate": {
+    "train": 0.5157,
+    "val": 0.4785,
+    "test": 0.5348
+  },
+  "holdout_rows": 5809,
+  "max_len_note": "tokenized at 256 (see train.py)"
+}

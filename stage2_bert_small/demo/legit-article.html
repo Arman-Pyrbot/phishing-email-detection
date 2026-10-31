@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Phishing — reference article</title>
+    <!-- Synthetic, inert test fixture for the phishing-project extension.
+         It has no forms, no scripts and no network requests of any kind. -->
+    <style>
+      body { font: 16px/1.7 Georgia, "Times New Roman", serif; max-width: 700px;
+             margin: 48px auto; padding: 0 20px; color: #1f2328; }
+      h1 { font-size: 28px; font-family: system-ui, sans-serif; }
+      h2 { font-size: 19px; font-family: system-ui, sans-serif; margin-top: 28px; }
+      nav { font: 13px system-ui, sans-serif; color: #656d76; margin-bottom: 20px; }
+      footer { margin-top: 30px; font: 12px system-ui, sans-serif; color: #656d76; }
+    </style>
+  </head>
+  <body>
+    <nav>Reference · Security · Network protocols</nav>
+    <h1>Phishing</h1>
+
+    <p>
+      Phishing is a form of social engineering in which an attacker deceives a
+      recipient into revealing credentials, payment details or other sensitive
+      information. The term was coined in the mid-1990s by members of the
+      America Online community, who described the practice of "fishing" for
+      account passwords using instant messages that appeared to come from
+      official support staff.
+    </p>
+
+    <h2>Techniques</h2>
+    <p>
+      The most common technique is a spoofed message that imitates a trusted
+      organisation and directs the recipient to a website controlled by the
+      attacker. The website reproduces the layout of the genuine service so that
+      the recipient enters credentials without suspicion. More recent variants
+      include spear phishing, which targets a specific individual using
+      information gathered from public sources, and clone phishing, in which a
+      genuine message is copied and its links replaced.
+    </p>
+
+    <h2>Detection and mitigation</h2>
+    <p>
+      Defences fall into three broad groups: user education, technical filtering
+      and authentication. Filtering systems typically examine the message body,
+      the sending domain and the structure of embedded links. Authentication
+      standards such as SPF, DKIM and DMARC allow a receiving server to verify
+      that a message genuinely originated from the domain it claims to represent.
+      Multi-factor authentication limits the value of a stolen password, because
+      possession of the password alone is no longer sufficient to gain access.
+    </p>
+
+    <h2>Research</h2>
+    <p>
+      Academic work in this area frequently studies the problem as a text
+      classification task, comparing lexical features, character n-grams and
+      learned representations produced by transformer models. Reported results
+      depend heavily on the corpus used, and cross-corpus generalisation remains
+      an open problem because the vocabulary of real campaigns changes quickly.
+    </p>
+
+    <footer>Last edited 12 March 2026 · Reference material · Text available for reuse.</footer>
+  </body>
+</html>

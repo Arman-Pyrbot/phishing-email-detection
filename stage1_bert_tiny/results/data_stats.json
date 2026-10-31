@@ -1,0 +1,67 @@
+{
+  "dataset": {
+    "name": "phish-sentinel unified corpus plus three extra email corpora",
+    "copied_verbatim_from": "phish-sentinel/data/unified/{train,val,test}.parquet",
+    "original_builder": "phish-sentinel ml/build_dataset.py",
+    "original_sources": {
+      "ceas": 37154,
+      "curated": 60000,
+      "phiushiil": 60000,
+      "phreshphish": 11995
+    },
+    "raw_split_sizes": {
+      "train": 127284,
+      "val": 15911,
+      "test": 15911
+    },
+    "raw_class_balance": {
+      "phishing_rate_overall": 0.51493
+    },
+    "extra_corpora": {
+      "fetched_by": "training/fetch_external.py",
+      "manifest": "training/data/external/external_sources.json",
+      "mirror_repository": "https://github.com/rokibulroni/Phishing-Email-Dataset",
+      "row_counts": {
+        "external:nigerian_fraud": 3332,
+        "external:nazario": 1565
+      },
+      "grouping": "h:<sha1(sender|subject)> - a campaign proxy",
+      "text_layout": "[from] <sender>\\n[body] <subject>\\n<body>",
+      "held_out": {
+        "source": "external:spamassassin",
+        "rows": 5809,
+        "phishing_rate": 0.295748,
+        "never_trained_on": true,
+        "note": "SpamAssassin is a spam corpus and much of its legitimate class is promotional mail, so its false-positive rate is an upper bound rather than a like-for-like measurement"
+      }
+    }
+  },
+  "deduplication": {
+    "method": "exact match on cleaned text, first occurrence kept",
+    "removed_invalid_rows": 0,
+    "removed_duplicate_rows": 9717,
+    "cross_split_duplicate_texts_in_raw_files": 0
+  },
+  "split": {
+    "seed": 42,
+    "method": "group-disjoint; shuffled groups, cut at 80%/90% of rows",
+    "sizes": {
+      "train": 123479,
+      "val": 15379,
+      "test": 15428
+    },
+    "phishing_rate": {
+      "train": 0.516225,
+      "val": 0.479485,
+      "test": 0.536622
+    },
+    "asserted_no_text_overlap": true,
+    "asserted_no_group_overlap": true
+  },
+  "preprocessing": [
+    "strip ASCII control characters",
+    "collapse runs of whitespace to single spaces",
+    "drop rows with text shorter than 12 characters",
+    "drop exact duplicate texts (keep first occurrence)"
+  ]
+}

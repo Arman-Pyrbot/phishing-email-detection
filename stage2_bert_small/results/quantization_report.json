@@ -1,0 +1,51 @@
+{
+  "quantization": {
+    "method": "dynamic QInt8",
+    "fp32_bytes": 115138400,
+    "int8_bytes": 28994428
+  },
+  "parity": {
+    "fp32_vs_torch": 1.49e-07,
+    "drift_max": 0.020405,
+    "drift_mean": 0.00233
+  },
+  "test_fp32": {
+    "n": 15928,
+    "accuracy": 0.9882,
+    "precision": 0.9871,
+    "recall": 0.9908,
+    "f1": 0.989,
+    "roc_auc": 0.9983
+  },
+  "test_int8": {
+    "n": 15928,
+    "accuracy": 0.9881,
+    "precision": 0.9876,
+    "recall": 0.9901,
+    "f1": 0.9889,
+    "roc_auc": 0.9983
+  },
+  "delta": {
+    "accuracy": -0.0001,
+    "precision": 0.0005,
+    "recall": -0.0007,
+    "f1": -0.0001,
+    "roc_auc": 0.0
+  },
+  "disagreements": {
+    "count": 14,
+    "rate": 0.000879
+  },
+  "external_holdout_int8": {
+    "source": "external:spamassassin",
+    "never_trained_on": true,
+    "rows": 5809,
+    "n": 5809,
+    "accuracy": 0.8762,
+    "precision": 0.7184,
+    "recall": 0.9563,
+    "f1": 0.8205,
+    "roc_auc": 0.9209,
+    "false_positive_rate": 0.1574
+  }
+}

@@ -1,0 +1,646 @@
+{
+  "data": {
+    "dataset": {
+      "name": "phish-sentinel unified corpus plus three extra email corpora",
+      "copied_verbatim_from": "phish-sentinel/data/unified/{train,val,test}.parquet",
+      "original_builder": "phish-sentinel ml/build_dataset.py",
+      "original_sources": {
+        "ceas": 37154,
+        "curated": 60000,
+        "phiushiil": 60000,
+        "phreshphish": 11995
+      },
+      "raw_split_sizes": {
+        "train": 127284,
+        "val": 15911,
+        "test": 15911
+      },
+      "raw_class_balance": {
+        "phishing_rate_overall": 0.51493
+      },
+      "extra_corpora": {
+        "fetched_by": "training/fetch_external.py",
+        "manifest": "training/data/external/external_sources.json",
+        "mirror_repository": "https://github.com/rokibulroni/Phishing-Email-Dataset",
+        "row_counts": {
+          "external:nigerian_fraud": 3332,
+          "external:nazario": 1565
+        },
+        "grouping": "h:<sha1(sender|subject)> - a campaign proxy",
+        "text_layout": "[from] <sender>\\n[body] <subject>\\n<body>",
+        "held_out": {
+          "source": "external:spamassassin",
+          "rows": 5809,
+          "phishing_rate": 0.295748,
+          "never_trained_on": true,
+          "note": "SpamAssassin is a spam corpus and much of its legitimate class is promotional mail, so its false-positive rate is an upper bound rather than a like-for-like measurement"
+        }
+      }
+    },
+    "deduplication": {
+      "method": "exact match on cleaned text, first occurrence kept",
+      "removed_invalid_rows": 0,
+      "removed_duplicate_rows": 9717,
+      "cross_split_duplicate_texts_in_raw_files": 0
+    },
+    "split": {
+      "seed": 42,
+      "method": "group-disjoint; shuffled groups, cut at 80%/90% of rows",
+      "sizes": {
+        "train": 123479,
+        "val": 15379,
+        "test": 15428
+      },
+      "phishing_rate": {
+        "train": 0.516225,
+        "val": 0.479485,
+        "test": 0.536622
+      },
+      "asserted_no_text_overlap": true,
+      "asserted_no_group_overlap": true
+    }
+  },
+  "preprocessing": {
+    "normalization_steps": [
+      "strip ASCII control characters",
+      "collapse runs of whitespace to single spaces",
+      "drop rows with text shorter than 12 characters",
+      "drop exact duplicate texts (keep first occurrence)"
+    ],
+    "tokenizer": "BERT WordPiece uncased (bert-base-uncased vocab)",
+    "truncation": true,
+    "max_sequence_length": 192
+  },
+  "model": {
+    "base_checkpoint": "prajjwal1/bert-tiny",
+    "architecture": "BERT-tiny (2 layers, 128 hidden, 2 attention heads) + 2-class linear head",
+    "parameters_total": 4386178,
+    "parameters_trainable": 4386178,
+    "num_labels": 2,
+    "labels": [
+      "legitimate",
+      "phishing"
+    ],
+    "id2label": {
+      "0": "legitimate",
+      "1": "phishing"
+    },
+    "quantization_settings": {
+      "method": "dynamic QInt8 (onnxruntime.quantization.quantize_dynamic)",
+      "applies_to": "MatMul weights -> int8 with dynamically quantised activations; embedding tables (word/position/token_type) -> uint8 with per-tensor scales; LayerNorm weights and all biases stay float32",
+      "fp32_artifact_bytes": 17591477,
+      "int8_artifact_bytes": 4480678
+    }
+  },
+  "training": {
+    "seed": 42,
+    "optimizer": "AdamW",
+    "lr_schedule": "linear warmup (0.06) + cosine decay",
+    "learning_rate": 5e-05,
+    "batch_size": 64,
+    "weight_decay": 0.01,
+    "epochs_max": 3,
+    "epochs_run": 3,
+    "early_stopping": {
+      "monitor": "val_f1",
+      "patience": 1,
+      "best_epoch": 3
+    },
+    "max_sequence_length": 192,
+    "train_rows": 123479,
+    "val_rows": 15379,
+    "minutes": 4.17,
+    "per_epoch": [
+      {
+        "epoch": 1,
+        "train_loss": 0.2121,
+        "val_loss": 0.0814,
+        "val_accuracy": 0.9705,
+        "val_precision": 0.987,
+        "val_recall": 0.9509,
+        "val_f1": 0.9686,
+        "val_roc_auc": 0.9967,
+        "lr": 4.03e-05,
+        "seconds": 84.9
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.0622,
+        "val_loss": 0.0571,
+        "val_accuracy": 0.9817,
+        "val_precision": 0.9835,
+        "val_recall": 0.9783,
+        "val_f1": 0.9809,
+        "val_roc_auc": 0.9982,
+        "lr": 1.4e-05,
+        "seconds": 168.1
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.0453,
+        "val_loss": 0.0548,
+        "val_accuracy": 0.983,
+        "val_precision": 0.9821,
+        "val_recall": 0.9825,
+        "val_f1": 0.9823,
+        "val_roc_auc": 0.9984,
+        "lr": 5e-11,
+        "seconds": 250.4
+      }
+    ]
+  },
+  "evaluation_test_set": {
+    "n": 15428,
+    "threshold": 0.5,
+    "accuracy": 0.9782,
+    "precision": 0.9788,
+    "recall": 0.9806,
+    "f1": 0.9797,
+    "roc_auc": 0.9975,
+    "confusion_matrix": {
+      "tn": 6973,
+      "fp": 176,
+      "fn": 161,
+      "tp": 8118
+    },
+    "per_class": {
+      "legitimate": {
+        "precision": 0.9774,
+        "recall": 0.9754,
+        "f1-score": 0.9764,
+        "support": 7149.0
+      },
+      "phishing": {
+        "precision": 0.9788,
+        "recall": 0.9806,
+        "f1-score": 0.9797,
+        "support": 8279.0
+      }
+    }
+  },
+  "quantization_impact": {
+    "delta_int8_minus_float32": {
+      "accuracy": -0.0012,
+      "precision": 0.0035,
+      "recall": -0.006,
+      "f1": -0.0012,
+      "roc_auc": 0.0
+    },
+    "test_set_float32_onnx": {
+      "n": 15428,
+      "accuracy": 0.9782,
+      "precision": 0.9788,
+      "recall": 0.9806,
+      "f1": 0.9797,
+      "roc_auc": 0.9975
+    },
+    "test_set_int8_shipped": {
+      "n": 15428,
+      "accuracy": 0.977,
+      "precision": 0.9823,
+      "recall": 0.9746,
+      "f1": 0.9785,
+      "roc_auc": 0.9975
+    },
+    "verdict_disagreements": {
+      "count": 80,
+      "rate": 0.005185
+    },
+    "fixture_drift": {
+      "fp32_onnx_vs_pytorch_max_abs_diff": 8.64e-07,
+      "n_fixture_texts": 24,
+      "int8_vs_fp32_fixture_drift_max": 0.183706,
+      "int8_vs_fp32_fixture_drift_mean": 0.028147
+    },
+    "external_holdout": {
+      "source": "external:spamassassin",
+      "never_trained_on": true,
+      "rows": 5809,
+      "n": 5809,
+      "accuracy": 0.8804,
+      "precision": 0.7451,
+      "recall": 0.9051,
+      "f1": 0.8173,
+      "roc_auc": 0.9516,
+      "false_positive_rate": 0.13
+    }
+  },
+  "browser": {
+    "methodology": "headless Chrome, vendored ONNX Runtime Web 1.18 WASM (single-threaded), model fetched from the same bundled files the extension ships",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+    "model_bytes": 4480678,
+    "model_load_ms": 301.1,
+    "inference_ms": {
+      "median": 5.2,
+      "p95": 6,
+      "n": 30
+    },
+    "model_parity": {
+      "n_fixtures": 24,
+      "reference": "PyTorch float32 probabilities recorded by training/export.py",
+      "fp32_runtime_equivalence": {
+        "note": "same float32 graph, browser runtime vs native runtime",
+        "max_abs_diff": 2e-06,
+        "mean_abs_diff": 0,
+        "tolerance": 0.001
+      },
+      "shipped_int8_vs_reference": {
+        "max_abs_diff": 0.169333,
+        "mean_abs_diff": 0.013311,
+        "verdict_mismatches": 0
+      },
+      "int8_cross_runtime": {
+        "note": "same int8 graph, browser ORT-Web 1.18 WASM vs native ORT 1.30 CPU",
+        "max_abs_diff": 0.162583,
+        "mean_abs_diff": 0.007846,
+        "verdict_mismatches": 0,
+        "mean_tolerance": 0.02
+      },
+      "passed": true,
+      "rows": [
+        {
+          "shape": "url only",
+          "reference_fp32": 0.077357,
+          "python_int8": 0.060633,
+          "browser_int8": 0.04964,
+          "diff_vs_reference": 0.027717,
+          "diff_vs_python_int8": 0.010993,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url only",
+          "reference_fp32": 0.994962,
+          "python_int8": 0.992862,
+          "browser_int8": 0.992662,
+          "diff_vs_reference": 0.0023,
+          "diff_vs_python_int8": 0.0002,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url only",
+          "reference_fp32": 0.917715,
+          "python_int8": 0.820494,
+          "browser_int8": 0.807405,
+          "diff_vs_reference": 0.11031,
+          "diff_vs_python_int8": 0.013089,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url only",
+          "reference_fp32": 0.005053,
+          "python_int8": 0.004741,
+          "browser_int8": 0.004561,
+          "diff_vs_reference": 0.000492,
+          "diff_vs_python_int8": 0.00018,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url + title",
+          "reference_fp32": 0.002352,
+          "python_int8": 0.0021,
+          "browser_int8": 0.002091,
+          "diff_vs_reference": 0.000261,
+          "diff_vs_python_int8": 9e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url + title",
+          "reference_fp32": 0.998787,
+          "python_int8": 0.998777,
+          "browser_int8": 0.99877,
+          "diff_vs_reference": 1.7e-05,
+          "diff_vs_python_int8": 7e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url + body",
+          "reference_fp32": 0.011592,
+          "python_int8": 0.007993,
+          "browser_int8": 0.00861,
+          "diff_vs_reference": 0.002982,
+          "diff_vs_python_int8": 0.000617,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "body only",
+          "reference_fp32": 0.996778,
+          "python_int8": 0.9966,
+          "browser_int8": 0.99662,
+          "diff_vs_reference": 0.000158,
+          "diff_vs_python_int8": 2e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "from + body",
+          "reference_fp32": 0.996617,
+          "python_int8": 0.996388,
+          "browser_int8": 0.996383,
+          "diff_vs_reference": 0.000234,
+          "diff_vs_python_int8": 5e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "url + title + from + body",
+          "reference_fp32": 0.284762,
+          "python_int8": 0.278012,
+          "browser_int8": 0.115429,
+          "diff_vs_reference": 0.169333,
+          "diff_vs_python_int8": 0.162583,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.001244,
+          "python_int8": 0.001259,
+          "browser_int8": 0.001264,
+          "diff_vs_reference": 2e-05,
+          "diff_vs_python_int8": 5e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.998216,
+          "python_int8": 0.99806,
+          "browser_int8": 0.998003,
+          "diff_vs_reference": 0.000213,
+          "diff_vs_python_int8": 5.7e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.001231,
+          "python_int8": 0.001237,
+          "browser_int8": 0.001236,
+          "diff_vs_reference": 5e-06,
+          "diff_vs_python_int8": 1e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.003303,
+          "python_int8": 0.002674,
+          "browser_int8": 0.002609,
+          "diff_vs_reference": 0.000694,
+          "diff_vs_python_int8": 6.5e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.00313,
+          "python_int8": 0.002445,
+          "browser_int8": 0.002518,
+          "diff_vs_reference": 0.000612,
+          "diff_vs_python_int8": 7.3e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.001502,
+          "python_int8": 0.001473,
+          "browser_int8": 0.001495,
+          "diff_vs_reference": 7e-06,
+          "diff_vs_python_int8": 2.2e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.998776,
+          "python_int8": 0.99876,
+          "browser_int8": 0.998762,
+          "diff_vs_reference": 1.4e-05,
+          "diff_vs_python_int8": 2e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.001304,
+          "python_int8": 0.001316,
+          "browser_int8": 0.001323,
+          "diff_vs_reference": 1.9e-05,
+          "diff_vs_python_int8": 7e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.001239,
+          "python_int8": 0.001241,
+          "browser_int8": 0.001244,
+          "diff_vs_reference": 5e-06,
+          "diff_vs_python_int8": 3e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.002486,
+          "python_int8": 0.002171,
+          "browser_int8": 0.002235,
+          "diff_vs_reference": 0.000251,
+          "diff_vs_python_int8": 6.4e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.993724,
+          "python_int8": 0.991384,
+          "browser_int8": 0.991593,
+          "diff_vs_reference": 0.002131,
+          "diff_vs_python_int8": 0.000209,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.998549,
+          "python_int8": 0.998523,
+          "browser_int8": 0.998535,
+          "diff_vs_reference": 1.4e-05,
+          "diff_vs_python_int8": 1.2e-05,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.998797,
+          "python_int8": 0.99878,
+          "browser_int8": 0.998783,
+          "diff_vs_reference": 1.4e-05,
+          "diff_vs_python_int8": 3e-06,
+          "verdict_agrees_with_reference": true
+        },
+        {
+          "shape": "test sample",
+          "reference_fp32": 0.006473,
+          "python_int8": 0.004893,
+          "browser_int8": 0.004812,
+          "diff_vs_reference": 0.001661,
+          "diff_vs_python_int8": 8.1e-05,
+          "verdict_agrees_with_reference": true
+        }
+      ]
+    }
+  },
+  "extension_smoke": {
+    "methodology": "headless Chrome, unpacked extension loaded via the DevTools Extensions domain; all assertions run on the chrome-extension:// origin",
+    "chrome": "Chrome/153.0.8010.53",
+    "extension_id": "oacmigandoijjcfmceimcanbeaopcckj",
+    "test_page": "http://127.0.0.1:8766/",
+    "prob_tolerance": 0.01,
+    "checks": {
+      "extension_loads": {
+        "passed": true,
+        "detail": "loaded \"Phishing Project\" v1.0.0 id=oacmigandoijjcfmceimcanbeaopcckj enabled=true"
+      },
+      "content_script_injected": {
+        "passed": true,
+        "detail": "isolated world \"Phishing Project\" on the test page, message listener registered = true"
+      },
+      "popup_origin": {
+        "passed": true,
+        "detail": "chrome.runtime.id on popup.html = oacmigandoijjcfmceimcanbeaopcckj"
+      },
+      "popup_scripts_run": {
+        "passed": true,
+        "detail": "#status after load = \"this page cannot be scanned\""
+      },
+      "bundled_assets_load": {
+        "passed": true,
+        "detail": "model.onnx 4480678 bytes fetched via chrome.runtime.getURL"
+      },
+      "csp_wasm_inference": {
+        "passed": true,
+        "detail": "P(phishing) = 0.049640 vs benchmarked 0.04964 (diff 0.000000)"
+      },
+      "no_csp_violations": {
+        "passed": true,
+        "detail": "no CSP violations logged"
+      }
+    },
+    "passed": true
+  },
+  "extraction_check": {
+    "methodology": "headless Chrome; the shipped extension/content.js is executed in each demo page with a message-listener shim, the document is built with the caps read out of extension/popup.js, and scored with the shipped int8 model",
+    "caps": {
+      "url": 120,
+      "title": 200,
+      "body": 1200
+    },
+    "pages": [
+      {
+        "page": "demo/phishing-login.html",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.997557,
+        "passed": true,
+        "body_chars": 411,
+        "body_head": "We have temporarily limited access to your account. Your account will be suspended within 24 hours unless you verify you"
+      },
+      {
+        "page": "demo/phishing-invoice.html",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.997237,
+        "passed": true,
+        "body_chars": 477,
+        "body_head": "Your payment details could not be confirmed. This invoice is now overdue and your service will be suspended within 24 ho"
+      },
+      {
+        "page": "demo/webmail-lookalike.html",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.992838,
+        "passed": true,
+        "body_chars": 777,
+        "body_head": "Arman Pybot <armanpytbot@gmail.com> \u00b7 to me \u00b7 5:01 PM (1 minute ago) \u00b7 Star We detected a sign-in to your PayPal account"
+      },
+      {
+        "page": "demo/webmail-iframe.html",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.995004,
+        "passed": true,
+        "body_chars": 601,
+        "body_head": "We detected a sign-in to your PayPal account that we were unable to verify. For your protection, access to some account "
+      },
+      {
+        "page": "demo/index.html",
+        "expected": "legitimate",
+        "verdict": "legitimate",
+        "p_phishing": 0.004973,
+        "passed": true,
+        "body_chars": 1457,
+        "body_head": "Six static pages for exercising the extension by hand: two that imitate credential-harvesting pages, two that reproduce "
+      },
+      {
+        "page": "demo/legit-article.html",
+        "expected": "legitimate",
+        "verdict": "legitimate",
+        "p_phishing": 0.16996,
+        "passed": true,
+        "body_chars": 1500,
+        "body_head": "Phishing is a form of social engineering in which an attacker deceives a recipient into revealing credentials, payment d"
+      },
+      {
+        "page": "demo/legit-shop.html",
+        "expected": "legitimate",
+        "verdict": "legitimate",
+        "p_phishing": 0.045143,
+        "passed": true,
+        "body_chars": 725,
+        "body_head": "Handmade tile studio \u00b7 open Tuesday to Saturday, 10am \u2013 5pm We make small-batch ceramic tiles in our workshop by the riv"
+      },
+      {
+        "page": "webmail: polite BEC invoice",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.5842,
+        "passed": true,
+        "body_chars": 509,
+        "body_head": "Hi Arman, I am following up on invoice #INV-48217 for the September software renewal. Our finance team recently updated "
+      },
+      {
+        "page": "webmail: shared document",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.993638,
+        "passed": true,
+        "body_chars": 440,
+        "body_head": "Hi Arman, A document has been shared with you in Microsoft 365. Q3 Internship Evaluation - Confidential The document is "
+      },
+      {
+        "page": "webmail: invoice payment required",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.996158,
+        "passed": true,
+        "body_chars": 631,
+        "body_head": "From: Billing Department billing.notice@example.net To: Arman Subject: Invoice INV-2291 - Payment Required Hi Arman, We "
+      },
+      {
+        "page": "webmail: account security alert",
+        "expected": "phishing",
+        "verdict": "phishing",
+        "p_phishing": 0.996174,
+        "passed": true,
+        "body_chars": 625,
+        "body_head": "From: PayPal Security alert@example.net To: Arman Subject: Unusual sign-in activity detected Hi Arman, We detected a sig"
+      },
+      {
+        "page": "webmail: ordinary reply (control)",
+        "expected": "legitimate",
+        "verdict": "legitimate",
+        "p_phishing": 0.001911,
+        "passed": true,
+        "body_chars": 213,
+        "body_head": "Hi Arman, Thursday works for me. Shall we say 12:30 at the place near the station? I will book a table if that suits. Le"
+      }
+    ],
+    "passed": true
+  },
+  "environment": {
+    "python": "3.13.14",
+    "torch": "2.14.0+cu126",
+    "transformers": "5.17.0",
+    "device": "cuda",
+    "hardware": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "cpu_count": 16,
+    "date_utc": "2026-09-22T13:14:13.950629+00:00"
+  }
+}

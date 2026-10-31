@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Action required: Updated payment details for invoice #INV-48217 — Webmail</title>
+    <!-- Synthetic, inert test fixture for the phishing-project extension.
+         It reproduces the DOM shape of a webmail client: navigation chrome
+         (sidebar, search bar, toolbar) comes BEFORE the message body in DOM
+         order, which is what breaks a naive prefix of body.innerText.
+         No forms that submit anywhere, no scripts, no network requests. -->
+    <style>
+      body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+             color: #1f2328; display: flex; }
+      aside { width: 230px; padding: 16px; border-right: 1px solid #d0d7de; background: #f6f8fa; }
+      aside a { display: block; padding: 4px 8px; color: #1f2328; text-decoration: none;
+                font-size: 13px; }
+      main { flex: 1; padding: 16px 24px; }
+      .topbar { display: flex; gap: 10px; align-items: center; padding-bottom: 12px;
+                border-bottom: 1px solid #d0d7de; color: #656d76; font-size: 13px; }
+      .toolbar { padding: 10px 0; color: #656d76; font-size: 12px; }
+      .toolbar span { margin-right: 14px; }
+      h1 { font-size: 20px; margin: 14px 0 6px; }
+      .meta { color: #656d76; font-size: 13px; margin-bottom: 14px; }
+      .msg p { margin: 12px 0; max-width: 620px; }
+    </style>
+  </head>
+  <body>
+    <aside>
+      <a href="#">Compose</a>
+      <a href="#">Inbox 770</a>
+      <a href="#">Starred</a>
+      <a href="#">Snoozed</a>
+      <a href="#">Important</a>
+      <a href="#">Sent</a>
+      <a href="#">Drafts 1</a>
+      <a href="#">All Mail</a>
+      <a href="#">Trash</a>
+      <a href="#">Spam 12</a>
+      <a href="#">Purchases 601</a>
+      <a href="#">Social 2370</a>
+      <a href="#">Updates 2370</a>
+      <a href="#">Forums 880</a>
+      <a href="#">Promotions 880</a>
+      <a href="#">Labels</a>
+      <a href="#">Research Paper 3</a>
+      <a href="#">SBI 3</a>
+      <a href="#">Manage labels</a>
+      <a href="#">Create new label</a>
+      <a href="#">Settings</a>
+      <a href="#">Help and feedback</a>
+      <a href="#">Keyboard shortcuts</a>
+      <a href="#">Terms and privacy</a>
+      <a href="#">Programme policies</a>
+      <a href="#">Account storage</a>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <span>Search mail</span>
+        <span>Search by sender</span>
+        <span>Show search options</span>
+        <span>Support</span>
+        <span>Settings</span>
+        <span>Apps</span>
+        <span>Account</span>
+        <span>Upgrade</span>
+        <span>Google apps launcher</span>
+        <span>Notifications</span>
+      </div>
+
+      <div class="toolbar">
+        <span>Back to inbox</span>
+        <span>Archive</span>
+        <span>Report spam</span>
+        <span>Delete</span>
+        <span>Mark as read</span>
+        <span>Mark as unread</span>
+        <span>Snooze</span>
+        <span>Move to</span>
+        <span>Labels</span>
+        <span>More options</span>
+        <span>Print all</span>
+        <span>In new window</span>
+        <span>Reply</span>
+        <span>Reply all</span>
+        <span>Forward</span>
+        <span>Add reaction</span>
+        <span>Show original</span>
+        <span>Translate message</span>
+        <span>Download message</span>
+      </div>
+
+      <h1>Phishing test email — account security</h1>
+      <div class="meta">
+        Arman Pybot &lt;armanpytbot@gmail.com&gt; · to me · 5:01 PM (1 minute ago) · Star
+      </div>
+
+      <div class="msg">
+        <p>Hi Arman,</p>
+        <p>
+          We detected a sign-in to your PayPal account that we were unable to verify.
+        </p>
+        <p>
+          For your protection, access to some account features has been temporarily
+          restricted.
+        </p>
+        <p>Date: 22 September 2026<br />Location: New Delhi, India<br />Device: Windows PC</p>
+        <p>
+          If this activity was not performed by you, please verify your account
+          immediately.
+        </p>
+        <p>
+          Review account activity:
+          https://paypal-security-check.example.net/verify
+        </p>
+        <p>
+          You may be asked to sign in again and confirm your billing information.
+        </p>
+        <p>
+          Please complete verification within 24 hours. If we cannot confirm your
+          account information, access to your account may be suspended.
+        </p>
+        <p>
+          Thank you,<br />PayPal Security Team<br />This is an automated security
+          notification. Please do not reply to this email.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>

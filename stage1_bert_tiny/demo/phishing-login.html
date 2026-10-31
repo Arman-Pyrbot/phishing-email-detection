@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Sign in to your account</title>
+    <!-- Synthetic, inert test fixture for the phishing-project extension.
+         It has no forms, no scripts and no network requests of any kind. -->
+    <style>
+      body { font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+             max-width: 640px; margin: 48px auto; padding: 0 20px; color: #1f2328; }
+      h1 { font-size: 24px; margin-bottom: 4px; }
+      .warn { background: #ffebe9; border: 1px solid #ff818266; border-radius: 8px;
+              padding: 14px 16px; margin: 20px 0; }
+      .box { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 8px;
+             padding: 16px; }
+      label { display: block; margin: 10px 0 4px; font-weight: 600; font-size: 13px; }
+      input { width: 100%; padding: 8px; border: 1px solid #d0d7de; border-radius: 6px;
+              background: #fff; }
+      .btn { display: inline-block; margin-top: 14px; padding: 9px 18px; background: #0969da;
+             color: #fff; border-radius: 6px; font-weight: 600; }
+      footer { margin-top: 28px; font-size: 12px; color: #656d76; }
+    </style>
+  </head>
+  <body>
+    <h1>Sign in to your account</h1>
+    <p>PayPal Security Centre</p>
+
+    <div class="warn">
+      <strong>Unusual sign-in activity detected.</strong> We have temporarily limited
+      access to your account. Your account will be suspended within 24 hours unless
+      you verify your password immediately.
+    </div>
+
+    <div class="box">
+      <label for="email">Email address</label>
+      <input id="email" type="text" placeholder="you@example.com" />
+      <label for="password">Password</label>
+      <input id="password" type="text" placeholder="Your password" />
+      <span class="btn">Verify your password now</span>
+    </div>
+
+    <p>
+      Dear customer, to restore access you must confirm your billing information and
+      re-enter your password. Failure to verify your account within 24 hours will
+      result in permanent closure. Click below to confirm your account details and
+      avoid any unauthorised transaction.
+    </p>
+
+    <footer>
+      This message was sent automatically. Please do not reply. Verify your account
+      information to keep your account active.
+    </footer>
+  </body>
+</html>

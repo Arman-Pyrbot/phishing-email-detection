@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fishing Phish</title>
+    <style>
+      body {
+        font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        width: 300px;
+        margin: 0;
+        padding: 14px;
+        background: #fff;
+        color: #1f2328;
+      }
+      h1 { font-size: 15px; margin: 0 0 4px; }
+      #status { color: #656d76; min-height: 20px; }
+      #status.error { color: #cf222e; }
+      #verdict {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        background: #f6f8fa;
+        display: none;
+      }
+      #verdict.visible { display: block; }
+      #verdict.phishing { background: #ffebe9; }
+      #verdict.legitimate { background: #dafbe1; }
+      #label { font-size: 20px; font-weight: 700; text-transform: capitalize; }
+      #confidence { font-size: 13px; color: #424a53; }
+      .bar {
+        height: 8px;
+        background: #d0d7de;
+        border-radius: 4px;
+        margin: 8px 0 6px;
+        overflow: hidden;
+      }
+      #barFill { display: block; height: 100%; background: #cf222e; width: 0%; }
+      #detail { font-size: 11px; color: #656d76; word-break: break-all; }
+      #rescan {
+        margin-top: 10px;
+        padding: 5px 12px;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
+        background: #f6f8fa;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Fishing Phish</h1>
+    <div id="status">starting…</div>
+    <div id="verdict">
+      <div id="label">—</div>
+      <div id="confidence"></div>
+      <div class="bar"><span id="barFill"></span></div>
+      <div id="detail"></div>
+    </div>
+    <button id="rescan">Scan again</button>
+    <script src="vendor/ort.wasm.min.js"></script>
+    <script src="tokenizer.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

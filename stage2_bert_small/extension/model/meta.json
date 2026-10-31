@@ -1,0 +1,11 @@
+{
+  "backbone": "prajjwal1/bert-small",
+  "max_length": 256,
+  "threshold": 0.5,
+  "labels": [
+    "legitimate",
+    "phishing"
+  ],
+  "quantized_int8": true,
+  "parameters_total": 28764674
+}

@@ -1,0 +1,38 @@
+{
+  "methodology": "headless Chrome, unpacked extension loaded via the DevTools Extensions domain; all assertions run on the chrome-extension:// origin",
+  "chrome": "Chrome/153.0.8010.53",
+  "extension_id": "eiklbjighhbikhmildjejobbgmjofogk",
+  "test_page": "http://127.0.0.1:8766/",
+  "prob_tolerance": 0.01,
+  "checks": {
+    "extension_loads": {
+      "passed": true,
+      "detail": "loaded \"Fishing Phish\" v1.0.0 id=eiklbjighhbikhmildjejobbgmjofogk enabled=true"
+    },
+    "content_script_injected": {
+      "passed": true,
+      "detail": "isolated world \"Fishing Phish\" on the test page, message listener registered = true"
+    },
+    "popup_origin": {
+      "passed": true,
+      "detail": "chrome.runtime.id on popup.html = eiklbjighhbikhmildjejobbgmjofogk"
+    },
+    "popup_scripts_run": {
+      "passed": true,
+      "detail": "#status after load = \"this page cannot be scanned\""
+    },
+    "bundled_assets_load": {
+      "passed": true,
+      "detail": "model.onnx 28994428 bytes fetched via chrome.runtime.getURL"
+    },
+    "csp_wasm_inference": {
+      "passed": true,
+      "detail": "P(phishing) = 0.029318 vs benchmarked 0.029318 (diff 0.000000)"
+    },
+    "no_csp_violations": {
+      "passed": true,
+      "detail": "no CSP violations logged"
+    }
+  },
+  "passed": true
+}

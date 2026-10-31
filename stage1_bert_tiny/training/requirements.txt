@@ -1,0 +1,15 @@
+# Proven stack — same versions as the original phish-sentinel training venv.
+--extra-index-url https://download.pytorch.org/whl/cu126
+torch==2.14.0+cu126
+transformers==5.17.0
+tokenizers==0.23.2
+huggingface-hub==1.31.0
+safetensors==0.8.0
+numpy==2.2.6
+pandas==3.0.5
+pyarrow==25.0.1
+scikit-learn==1.9.1
+scipy==1.18.1
+onnx==1.22.0
+onnxruntime==1.30.0
+protobuf==7.36.1

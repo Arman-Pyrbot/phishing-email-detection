@@ -1,0 +1,119 @@
+{
+  "methodology": "headless Chrome; the shipped extension/content.js is executed in each demo page with a message-listener shim, the document is built with the caps read out of extension/popup.js, and scored with the shipped int8 model",
+  "caps": {
+    "url": 120,
+    "title": 200,
+    "body": 1200
+  },
+  "pages": [
+    {
+      "page": "demo/phishing-login.html",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.976539,
+      "passed": true,
+      "body_chars": 411,
+      "body_head": "We have temporarily limited access to your account. Your account will be suspended within 24 hours unless you verify you"
+    },
+    {
+      "page": "demo/phishing-invoice.html",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.976853,
+      "passed": true,
+      "body_chars": 477,
+      "body_head": "Your payment details could not be confirmed. This invoice is now overdue and your service will be suspended within 24 ho"
+    },
+    {
+      "page": "demo/webmail-lookalike.html",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.974695,
+      "passed": true,
+      "body_chars": 777,
+      "body_head": "Arman Pybot <armanpytbot@gmail.com> · to me · 5:01 PM (1 minute ago) · Star We detected a sign-in to your PayPal account"
+    },
+    {
+      "page": "demo/webmail-iframe.html",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.976408,
+      "passed": true,
+      "body_chars": 601,
+      "body_head": "We detected a sign-in to your PayPal account that we were unable to verify. For your protection, access to some account "
+    },
+    {
+      "page": "demo/index.html",
+      "expected": "legitimate",
+      "verdict": "legitimate",
+      "p_phishing": 0.030161,
+      "passed": true,
+      "body_chars": 1500,
+      "body_head": "Six static pages for exercising the extension by hand: two that imitate credential-harvesting pages, two that reproduce "
+    },
+    {
+      "page": "demo/legit-article.html",
+      "expected": "legitimate",
+      "verdict": "legitimate",
+      "p_phishing": 0.027853,
+      "passed": true,
+      "body_chars": 1500,
+      "body_head": "Phishing is a form of social engineering in which an attacker deceives a recipient into revealing credentials, payment d"
+    },
+    {
+      "page": "demo/legit-shop.html",
+      "expected": "legitimate",
+      "verdict": "legitimate",
+      "p_phishing": 0.024003,
+      "passed": true,
+      "body_chars": 725,
+      "body_head": "Handmade tile studio · open Tuesday to Saturday, 10am – 5pm We make small-batch ceramic tiles in our workshop by the riv"
+    },
+    {
+      "page": "webmail: polite BEC invoice",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.944402,
+      "passed": true,
+      "body_chars": 509,
+      "body_head": "Hi Arman, I am following up on invoice #INV-48217 for the September software renewal. Our finance team recently updated "
+    },
+    {
+      "page": "webmail: shared document",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.975337,
+      "passed": true,
+      "body_chars": 440,
+      "body_head": "Hi Arman, A document has been shared with you in Microsoft 365. Q3 Internship Evaluation - Confidential The document is "
+    },
+    {
+      "page": "webmail: invoice payment required",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.976679,
+      "passed": true,
+      "body_chars": 631,
+      "body_head": "From: Billing Department billing.notice@example.net To: Arman Subject: Invoice INV-2291 - Payment Required Hi Arman, We "
+    },
+    {
+      "page": "webmail: account security alert",
+      "expected": "phishing",
+      "verdict": "phishing",
+      "p_phishing": 0.976407,
+      "passed": true,
+      "body_chars": 625,
+      "body_head": "From: PayPal Security alert@example.net To: Arman Subject: Unusual sign-in activity detected Hi Arman, We detected a sig"
+    },
+    {
+      "page": "webmail: ordinary reply (control)",
+      "expected": "legitimate",
+      "verdict": "legitimate",
+      "p_phishing": 0.024511,
+      "passed": true,
+      "body_chars": 213,
+      "body_head": "Hi Arman, Thursday works for me. Shall we say 12:30 at the place near the station? I will book a table if that suits. Le"
+    }
+  ],
+  "passed": true
+}

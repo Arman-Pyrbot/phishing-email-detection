@@ -1,0 +1,53 @@
+{
+  "quantization": {
+    "method": "dynamic QInt8 (onnxruntime.quantization.quantize_dynamic)",
+    "applies_to": "MatMul weights -> int8 with dynamically quantised activations; embedding tables (word/position/token_type) -> uint8 with per-tensor scales; LayerNorm weights and all biases stay float32",
+    "fp32_artifact_bytes": 17591477,
+    "int8_artifact_bytes": 4480678
+  },
+  "parity": {
+    "fp32_onnx_vs_pytorch_max_abs_diff": 8.64e-07,
+    "n_fixture_texts": 24,
+    "int8_vs_fp32_fixture_drift_max": 0.183706,
+    "int8_vs_fp32_fixture_drift_mean": 0.028147
+  },
+  "test_set_float32_onnx": {
+    "n": 15428,
+    "accuracy": 0.9782,
+    "precision": 0.9788,
+    "recall": 0.9806,
+    "f1": 0.9797,
+    "roc_auc": 0.9975
+  },
+  "test_set_int8_shipped": {
+    "n": 15428,
+    "accuracy": 0.977,
+    "precision": 0.9823,
+    "recall": 0.9746,
+    "f1": 0.9785,
+    "roc_auc": 0.9975
+  },
+  "delta_int8_minus_float32": {
+    "accuracy": -0.0012,
+    "precision": 0.0035,
+    "recall": -0.006,
+    "f1": -0.0012,
+    "roc_auc": 0.0
+  },
+  "external_holdout_int8": {
+    "source": "external:spamassassin",
+    "never_trained_on": true,
+    "rows": 5809,
+    "n": 5809,
+    "accuracy": 0.8804,
+    "precision": 0.7451,
+    "recall": 0.9051,
+    "f1": 0.8173,
+    "roc_auc": 0.9516,
+    "false_positive_rate": 0.13
+  },
+  "verdict_disagreements_fp32_vs_int8": {
+    "count": 80,
+    "rate": 0.005185
+  }
+}

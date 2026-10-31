@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Phishing detector — demo pages</title>
+    <!-- Synthetic, inert test fixtures for the phishing-project extension.
+         No page in this folder has forms that submit anywhere, scripts, or any
+         network request. The two "phishing" pages are static lookalikes used
+         only to exercise the classifier. -->
+    <style>
+      body { font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+             max-width: 720px; margin: 48px auto; padding: 0 20px; color: #1f2328; }
+      h1 { font-size: 24px; }
+      table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+      th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid #d0d7de; }
+      th { background: #f6f8fa; font-size: 13px; text-transform: uppercase;
+           letter-spacing: .03em; color: #424a53; }
+      code { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 4px;
+             padding: 1px 5px; font-size: 13px; }
+      pre { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 8px;
+            padding: 12px 14px; overflow-x: auto; font-size: 13px; }
+      .phish { color: #cf222e; font-weight: 600; }
+      .legit { color: #1a7f37; font-weight: 600; }
+      .note { background: #fff8c5; border: 1px solid #d4a72c66; border-radius: 8px;
+              padding: 12px 14px; }
+      footer { margin-top: 30px; font-size: 12px; color: #656d76; }
+    </style>
+  </head>
+  <body>
+    <h1>Phishing detector — demo pages</h1>
+
+    <p>
+      Six static pages for exercising the extension by hand: two that imitate
+      credential-harvesting pages, two that reproduce a webmail client with a
+      phishing message open, and two ordinary pages. The verdicts below were
+      measured with the shipped model on the exact text the extension extracts
+      from each page.
+    </p>
+
+    <div class="note">
+      <strong>These pages must be served over HTTP.</strong> Opening them with
+      <code>file://</code> will not work: the content script only matches
+      <code>http://*/*</code> and <code>https://*/*</code>, and the popup refuses
+      to scan any page that is not <code>http</code> or <code>https</code>.
+    </div>
+
+    <pre>cd phishing-project
+.venv/Scripts/python.exe -m http.server 8000 --bind 127.0.0.1</pre>
+
+    <p>
+      The <code>--bind 127.0.0.1</code> keeps the server on the loopback
+      interface, so the project folder is not exposed to your local network.
+      Then open <code>http://127.0.0.1:8000/demo/index.html</code> and click the
+      extension icon on each page.
+    </p>
+
+    <table>
+      <tr>
+        <th>Page</th>
+        <th>Expected verdict</th>
+        <th>P(phishing)</th>
+      </tr>
+      <tr>
+        <td><a href="phishing-login.html">phishing-login.html</a></td>
+        <td class="phish">phishing</td>
+        <td>0.998</td>
+      </tr>
+      <tr>
+        <td><a href="phishing-invoice.html">phishing-invoice.html</a></td>
+        <td class="phish">phishing</td>
+        <td>0.997</td>
+      </tr>
+      <tr>
+        <td><a href="webmail-lookalike.html">webmail-lookalike.html</a></td>
+        <td class="phish">phishing</td>
+        <td>0.993</td>
+      </tr>
+      <tr>
+        <td><a href="webmail-iframe.html">webmail-iframe.html</a></td>
+        <td class="phish">phishing</td>
+        <td>0.995</td>
+      </tr>
+      <tr>
+        <td><a href="legit-article.html">legit-article.html</a></td>
+        <td class="legit">legitimate</td>
+        <td>0.170</td>
+      </tr>
+      <tr>
+        <td><a href="legit-shop.html">legit-shop.html</a></td>
+        <td class="legit">legitimate</td>
+        <td>0.045</td>
+      </tr>
+    </table>
+
+    <p>
+      <strong>webmail-lookalike.html and webmail-iframe.html are the interesting
+      ones.</strong> The first puts a sidebar, a search bar and a toolbar before
+      the message, the way a real webmail client does. The extension originally
+      took the first 1,500 characters of the page's text, which on a page shaped
+      like this is the sidebar — so a phishing email was classified as
+      legitimate. It now collects the page's prose and skips links and
+      navigation. The second puts the same message inside an iframe, which the
+      extension could not read at all until it was taught to look in same-origin
+      frames. Both exist as regression fixtures for those two bugs.
+    </p>
+
+    <p>
+      Neither page reproduces the <em>real</em> cause of that failure, though,
+      because it was not in the extractor at all. The model was being sent
+      <code>[url]</code>, <code>[title]</code> and <code>[body]</code> together,
+      and its training corpus contains no such document — only
+      <code>[url]</code>+<code>[title]</code> for URL pages and
+      <code>[from]</code>+<code>[body]</code> for emails. So a Gmail page's own
+      URL and title made it classify <em>the mail client</em> instead of the
+      message. A webmail client's URL describes the client, not the mail, which
+      is why the extension now omits it there.
+    </p>
+
+    <p>
+      None of these pages contains a form that submits data, a script, or any
+      network request. The four lookalikes are inert text used only as input to
+      the classifier.
+    </p>
+
+    <footer>
+      Phishing Project · demo fixtures · see <code>README.md</code> for how to run it.
+    </footer>
+  </body>
+</html>

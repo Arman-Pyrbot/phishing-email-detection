@@ -1,0 +1,16 @@
+{
+  "authored_files_scanned": [
+    "manifest.json",
+    "popup.html",
+    "popup.js",
+    "content.js",
+    "tokenizer.js"
+  ],
+  "remote_load_violations": [],
+  "manifest_reference_ok": true,
+  "permissions": [
+    "activeTab"
+  ],
+  "passed": true,
+  "violations": []
+}

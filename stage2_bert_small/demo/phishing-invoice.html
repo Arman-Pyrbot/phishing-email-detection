@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice INV-2291 outstanding balance</title>
+    <!-- Synthetic, inert test fixture for the phishing-project extension.
+         It has no forms, no scripts and no network requests of any kind. -->
+    <style>
+      body { font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+             max-width: 640px; margin: 48px auto; padding: 0 20px; color: #1f2328; }
+      h1 { font-size: 22px; }
+      table { width: 100%; border-collapse: collapse; margin: 18px 0; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #d0d7de;
+               font-size: 14px; }
+      th { background: #f6f8fa; }
+      .urgent { background: #ffebe9; border: 1px solid #ff818266; border-radius: 8px;
+                padding: 14px 16px; }
+      .total { font-weight: 700; }
+      footer { margin-top: 26px; font-size: 12px; color: #656d76; }
+    </style>
+  </head>
+  <body>
+    <h1>Outstanding invoice payment required</h1>
+    <p>Billing Department</p>
+
+    <div class="urgent">
+      Your payment details could not be confirmed. This invoice is now overdue and
+      your service will be suspended within 24 hours. Please confirm your billing
+      information immediately to avoid additional charges.
+    </div>
+
+    <table>
+      <tr><th>Description</th><th>Amount</th></tr>
+      <tr><td>Invoice INV-2291</td><td>£1,284.00</td></tr>
+      <tr><td>Late payment fee</td><td>£96.00</td></tr>
+      <tr><td class="total">Total due</td><td class="total">£1,380.00</td></tr>
+    </table>
+
+    <p>
+      Dear customer, our records show an unauthorised transaction on your account.
+      To release this payment you must update your card details and verify your
+      password. Failure to act within 24 hours will result in permanent suspension
+      of your account. Do not ignore this notice.
+    </p>
+
+    <footer>
+      Automated billing notification. Confirm your account information to continue
+      using the service.
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Benchmark</title>
+  </head>
+  <body>
+    <pre id="out">running…</pre>
+    <!-- The vendored runtime and the exact artifacts the extension ships,
+         served over loopback by verification/bench.mjs for measurement. -->
+    <script src="../extension/vendor/ort.wasm.min.js"></script>
+    <script src="../extension/tokenizer.js"></script>
+    <script>
+      const r6 = (x) => Math.round(x * 1e6) / 1e6;
+      const r1 = (x) => Math.round(x * 10) / 10;
+      const percentile = (sorted, p) => sorted[Math.max(0, Math.ceil(p * sorted.length) - 1)];
+
+      async function phishingProbability(session, tokenizer, text, maxLen) {
+        const enc = tokenizer.encode(text, maxLen);
+        const shape = [1, maxLen];
+        const out = await session.run({
+          input_ids: new ort.Tensor("int64", enc.inputIds, shape),
+          attention_mask: new ort.Tensor("int64", enc.attentionMask, shape),
+          token_type_ids: new ort.Tensor("int64", enc.tokenTypeIds, shape),
+        });
+        const [logit0, logit1] = out.logits.data;
+        const peak = Math.max(logit0, logit1);
+        const e0 = Math.exp(logit0 - peak);
+        const e1 = Math.exp(logit1 - peak);
+        return e1 / (e0 + e1);
+      }
+
+      const fetchText = (url) => fetch(url).then((r) => r.text());
+      const fetchJson = (url) => fetch(url).then((r) => r.json());
+      const fetchBytes = (url) => fetch(url).then((r) => r.arrayBuffer());
+      const openSession = (bytes) =>
+        ort.InferenceSession.create(new Uint8Array(bytes), {
+          executionProviders: ["wasm"],
+          graphOptimizationLevel: "all",
+        });
+      const mean = (sum, n) => r6(sum / n);
+
+      (async () => {
+        const post = (payload) =>
+          fetch("/__bench_done", { method: "POST", body: JSON.stringify(payload) }).catch(() => {});
+        try {
+          ort.env.wasm.numThreads = 1;
+          ort.env.wasm.simd = true;
+          ort.env.wasm.wasmPaths = "../extension/vendor/";
+          ort.env.logLevel = "error";
+          const [vocab, meta, fixtures, int8Bytes, fp32Bytes] = await Promise.all([
+            fetchText("../extension/model/vocab.txt"),
+            fetchJson("../extension/model/meta.json"),
+            fetchJson("fixtures.json"),
+            fetchBytes("../extension/model/model.onnx"),
+            fetchBytes("../training/out/model.fp32.onnx"),
+          ]);
+
+          const t0 = performance.now();
+          const session = await openSession(int8Bytes);
+          const modelLoadMs = performance.now() - t0;
+          // Control leg: the float32 graph the Python reference came from. It
+          // separates "the runtimes disagree" from "int8 moved this input".
+          const fp32Session = await openSession(fp32Bytes);
+          const tokenizer = new PhishTokenizer(vocab);
+          const { threshold, max_length: maxLen } = meta;
+
+          // Parity is asserted against the PyTorch float32 reference, not a
+          // second int8 run: two int8 executions may land on opposite sides of
+          // 0.5 for a low-confidence input, while the float reference is the
+          // model's actual prediction. The int8-vs-int8 gap is reported too,
+          // because its size is a result in itself.
+          const FP32_TOLERANCE = 0.001;
+          const INT8_MEAN_TOLERANCE = 0.02;
+          const rows = [];
+          let fp32Max = 0, fp32Sum = 0, int8Max = 0, int8Sum = 0;
+          let int8Mismatches = 0, referenceMismatches = 0;
+          for (const fixture of fixtures) {
+            const p = await phishingProbability(session, tokenizer, fixture.text, maxLen);
+            const pf = await phishingProbability(fp32Session, tokenizer, fixture.text, maxLen);
+            const fp32Diff = Math.abs(pf - fixture.expected_fp32);
+            const int8Diff = Math.abs(p - fixture.expected_int8);
+            const refDiff = Math.abs(p - fixture.expected_fp32);
+            const agrees = (p >= threshold) === (fixture.expected_fp32 >= threshold);
+            fp32Max = Math.max(fp32Max, fp32Diff);
+            fp32Sum += fp32Diff;
+            int8Max = Math.max(int8Max, int8Diff);
+            int8Sum += int8Diff;
+            if (!agrees) referenceMismatches += 1;
+            if ((p >= threshold) !== (fixture.expected_int8 >= threshold)) int8Mismatches += 1;
+            rows.push({
+              shape: fixture.shape,
+              reference_fp32: fixture.expected_fp32,
+              python_int8: fixture.expected_int8,
+              browser_int8: r6(p),
+              diff_vs_reference: r6(refDiff),
+              diff_vs_python_int8: r6(int8Diff),
+              verdict_agrees_with_reference: agrees,
+            });
+          }
+
+          const texts = fixtures.map((f) => f.text);
+          for (let i = 0; i < 3; i++) {
+            await phishingProbability(session, tokenizer, texts[i], maxLen); // warmup
+          }
+          const latencies = [];
+          for (let i = 0; i < 30; i++) {
+            const s = performance.now();
+            await phishingProbability(session, tokenizer, texts[i % texts.length], maxLen);
+            latencies.push(performance.now() - s);
+          }
+          latencies.sort((x, y) => x - y);
+
+          const n = fixtures.length;
+          const refSum = rows.reduce((a, x) => a + x.diff_vs_reference, 0);
+          const parity = {
+            n_fixtures: n,
+            reference: "PyTorch float32 probabilities recorded by training/export.py",
+            fp32_runtime_equivalence: {
+              note: "same float32 graph, browser runtime vs native runtime",
+              max_abs_diff: r6(fp32Max),
+              mean_abs_diff: mean(fp32Sum, n),
+              tolerance: FP32_TOLERANCE,
+            },
+            shipped_int8_vs_reference: {
+              max_abs_diff: rows.reduce((a, x) => Math.max(a, x.diff_vs_reference), 0),
+              mean_abs_diff: mean(refSum, n),
+              verdict_mismatches: referenceMismatches,
+            },
+            int8_cross_runtime: {
+              note: "same int8 graph, browser ORT-Web 1.18 WASM vs native ORT 1.30 CPU",
+              max_abs_diff: r6(int8Max),
+              mean_abs_diff: mean(int8Sum, n),
+              verdict_mismatches: int8Mismatches,
+              mean_tolerance: INT8_MEAN_TOLERANCE,
+            },
+            passed:
+              fp32Max <= FP32_TOLERANCE &&
+              referenceMismatches === 0 &&
+              int8Sum / n <= INT8_MEAN_TOLERANCE,
+          };
+          const result = {
+            methodology:
+              "headless Chrome, vendored ONNX Runtime Web 1.18 WASM (single-threaded), " +
+              "model fetched from the same bundled files the extension ships",
+            user_agent: navigator.userAgent,
+            model_bytes: int8Bytes.byteLength,
+            model_load_ms: r1(modelLoadMs),
+            inference_ms: {
+              median: r1(percentile(latencies, 0.5)),
+              p95: r1(percentile(latencies, 0.95)),
+              n: latencies.length,
+            },
+            model_parity: { ...parity, rows },
+          };
+          document.getElementById("out").textContent = JSON.stringify(result);
+          await post(result);
+        } catch (e) {
+          const message = String((e && e.message) || e);
+          document.getElementById("out").textContent = "ERROR " + message;
+          await post({ error: message });
+        }
+      })();
+    </script>
+  </body>
+</html>
