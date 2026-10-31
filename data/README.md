@@ -1,6 +1,6 @@
 # Datasets
 
-Train, validation and test splits for all three stages. Each split is zipped to stay under GitHub's 100 MB file limit.
+Train/validation/test split for all three phases. Split is zipped to remain within the 100MB file limit of GitHub.
 
 | Folder | Files inside the zips | Split | Rows (train / val / test) |
 |---|---|---|---|
@@ -17,7 +17,7 @@ Label: 1 = phishing, 0 = legitimate.
 ## Sources
 
 - Stages 1 and 2: CEAS-08, a seven-corpus email collection, PhiUSIIL URL and page records, PhreshPhish, Nazario, Nigerian fraud, and SpamAssassin (holdout only).
-- Stage 3 text: the curated email datasets of Champa et al. (2024), SpaPhish, and a short-text set.
+- Stage 3 Text: Champa et al. (2024) curated emails, SpaPhish, and a short-text dataset.
 - Stage 3 URLs: PhiUSIIL (Prasad and Chandra, 2024).
 
-The raw corpora belong to their original authors and are not included. `ml/scripts/` and `stage1_bert_tiny/training/fetch_external.py` show where each one comes from.
+The raw data is NOT included. It is the property of their respective authors. `ml/scripts/` and `stage1_bert_tiny/training/fetch_external.py` indicate their source.

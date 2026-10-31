@@ -1,12 +1,12 @@
 # Stage 1: BERT-tiny in the browser
 
-First local model. A fine-tuned `prajjwal1/bert-tiny` (4.4M parameters), exported to ONNX and quantized to int8 (4.48 MB). It runs inside the Chrome extension with ONNX Runtime Web, so nothing leaves the browser.
+First local model. A finetuned `prajjwal1/bert-tiny` (4.4M params) converted to ONNX, int8 quant (4.48 MB). Executed in Chrome extension using ONNX Runtime Web - nothing goes out of browser.
 
-Test F1: 0.9797 (fp32), 0.9785 (int8). Median inference 5.2 ms. All numbers are in `results/metrics.json`.
+Test F1: 0.9797 (fp32), 0.9785 (int8), median inference speed 5.2 ms. See `results/metrics.json` for all the numbers.
 
 ## Folders
 
-- `extension/` Chrome extension (Manifest V3) with the int8 model in `extension/model/`
+- `extension/` Chrome extension (Manifest V3) using the int8 model on `extension/model/`
 - `training/` data preparation, training, export and quantization
 - `results/` metrics, benchmarks and the training log
 - `verification/` tokenizer parity, browser benchmark and offline checks
@@ -26,4 +26,4 @@ pip install -r requirements.txt
 python run.py
 ```
 
-`run.py` prepares the data, trains, exports the int8 model and runs the checks. The train/val/test splits we used are in `../data/stage1/`. Unzip them into `training/data/processed/` to reuse the same splits.
+`run.py` does the data prep, train, export to int8, and checks. `../data/stage1/` is the train/val/test we used. Unzip them to `training/data/processed/` to continue using the same ones.
