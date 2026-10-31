@@ -16,8 +16,25 @@ Label: 1 = phishing, 0 = legitimate.
 
 ## Sources
 
-- Stages 1 and 2: CEAS-08, a seven-corpus email collection, PhiUSIIL URL and page records, PhreshPhish, Nazario, Nigerian fraud, and SpamAssassin (holdout only).
-- Stage 3 Text: Champa et al. (2024) curated emails, SpaPhish, and a short-text dataset.
-- Stage 3 URLs: PhiUSIIL (Prasad and Chandra, 2024).
+Stages 1 and 2:
 
-The raw data is NOT included. It is the property of their respective authors. `ml/scripts/` and `stage1_bert_tiny/training/fetch_external.py` indicate their source.
+| Dataset | Link | Rows used |
+|---|---|---|
+| CEAS-08 (Al-Subaiey et al.) | https://www.kaggle.com/datasets/naserabdullahalam/phishing-email-dataset | 37,154 |
+| Seven-corpus email collection (Champa et al.) | https://huggingface.co/datasets/puyang2025/seven-phishing-email-datasets (also on [Figshare](https://figshare.com/articles/dataset/Seven_Phishing_Email_Datasets/25432108)) | 60,000 |
+| PhiUSIIL URL and page records | https://archive.ics.uci.edu/dataset/967 | 60,000 |
+| PhreshPhish (revision `eabec4b7a66324b7`) | https://huggingface.co/datasets/phreshphish/phreshphish | 11,995 |
+| Nazario | https://github.com/rokibulroni/Phishing-Email-Dataset (CSV mirror of the Kaggle set) | 1,565 |
+| Nigerian fraud | same mirror | 3,332 |
+| SpamAssassin (holdout only) | same mirror | 5,809 |
+
+Stage 3:
+
+| Dataset | Link | Rows |
+|---|---|---|
+| Curated email datasets, 11 corpora (Champa et al., ICMI 2024) | https://zenodo.org/records/8339691 | 139,502 after merging with the two sets below and removing duplicates |
+| SpaPhish | https://doi.org/10.17632/hz2d6gz7pc.3 | 1,395 |
+| Short-text phishing set (`phishing_dataset_1000.xlsx`) | source link not recorded | 909 |
+| PhiUSIIL (Prasad and Chandra, 2024) | https://archive.ics.uci.edu/dataset/967 | 235,370 after removing duplicates |
+
+The raw data is NOT included. It is the property of their respective authors. `stage1_bert_tiny/training/fetch_external.py` downloads Nazario, Nigerian fraud and SpamAssassin automatically.
