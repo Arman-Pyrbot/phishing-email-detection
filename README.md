@@ -4,6 +4,22 @@ A local phishing detection system that combines a trained DeBERTa text classifie
 
 The main detection endpoint runs locally and does not use keyword matching or an external LLM API. Gemini remains only as an optional legacy endpoint and is not required for the extension workflow.
 
+## Repository layout
+
+This repo holds the whole project, built in three stages:
+
+| Folder | What it is |
+|---|---|
+| `stage1_bert_tiny/` | Stage 1: BERT-tiny running fully in the browser |
+| `stage2_bert_small/` | Stage 2: BERT-small running fully in the browser |
+| `backend/`, `extension/`, `frontend/`, `ml/` | Stage 3 (final system): DeBERTa-v3 text model and XGBoost URL model on a local Flask service |
+| `ml/results/` | Stage 3 test results and training histories |
+| `data/` | Train, validation and test splits for all three stages (see `data/README.md`) |
+| `paper/` | Research paper (PDF and LaTeX source) |
+| `presentation/` | Presentation slides |
+
+The Stage 3 model weights are not in the repo because of their size. See "Important: Trained Model Files" below.
+
 ---
 
 # Project Overview
